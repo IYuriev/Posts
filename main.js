@@ -1,7 +1,10 @@
 "use strict";
 
 const URL = "http://localhost:3000/posts";
-let postId = 0;
+const inputTitle = document.querySelector(".title");
+const inputBody = document.querySelector(".body");
+const createBtn = document.querySelector(".btn-create");
+let postId = 11;
 const loader = document.querySelector('.loader');
 
 function setLoading() {
@@ -25,7 +28,6 @@ async function getData() {
     const responseObj = await response.json();
     // getDataPosts(responseObj);
     renderPosts(responseObj);
-    postId = responseObj.length;
   } catch(error) {
     showError(error.message);
   } finally {
@@ -79,21 +81,24 @@ function renderPosts(response) {
       li.append(saveBtn);
     });
 
-    saveBtn.addEventListener('click', async () => {
+    const id = String(post.id); 
+
+    saveBtn.addEventListener('click',  () => {
       const updatedTitle = li.querySelector('input').value;
-      try {
-        await fetch(`${URL}/${post.id}`, {
+      
+        fetch(`${URL}/${id}`, {
           method: 'PUT',
-          body: JSON.stringify({ title: updatedTitle }),
+          body: JSON.stringify({ 
+            title: updatedTitle,
+             body: post.body,
+             id: post.id,
+          }),
         });
         getData();
-      } catch (error) {
-        showError(error.message);
-      }
     });
 
     deleteBtn.addEventListener('click', () => {
-      fetch(`${URL}/${post.id}`, {
+      fetch(`${URL}/${id}`, {
         method: 'DELETE',
       });
     });
@@ -106,10 +111,6 @@ function renderPosts(response) {
   });
 }
 
-
-const inputTitle = document.querySelector(".title");
-const inputBody = document.querySelector(".body");
-const createBtn = document.querySelector(".btn-create");
 
 createBtn.addEventListener('click', (event) => {
   event.preventDefault();
