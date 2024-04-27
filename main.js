@@ -100,7 +100,7 @@ function renderPosts(response) {
     deleteBtn.addEventListener('click', () => {
       fetch(`${URL}/${id}`, {
         method: 'DELETE',
-      });
+      })
     });
 
     h3.append(editBtn);
@@ -117,7 +117,7 @@ createBtn.addEventListener('click', (event) => {
 
   const title = inputTitle.value;
   const body = inputBody.value;
-  const id = postId + 1;
+  const id = String(postId + 1);
 
   fetch(URL, {
     method: "POST",
@@ -126,5 +126,5 @@ createBtn.addEventListener('click', (event) => {
       body,
       id,
     }),
-  });
+  })
 })
